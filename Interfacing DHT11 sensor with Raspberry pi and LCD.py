@@ -1,0 +1,28 @@
+import sys
+import I2C_LCD_driver
+import Adafruit_DHT
+import time
+
+mylcd = I2C_LCD_driver.lcd()
+
+mylcd.lcd_clear()
+mylcd.lcd_display_string('Group01',1)
+mylcd.lcd_display_string('INS207701',2,1)
+
+try:
+    while True:
+
+        humidity, temperature = Adafruit_DHT.read_retry(11, 4)
+
+        if(temperature != None and humidity != None):
+            mylcd.lcd_clear()
+            mylcd.lcd_display_string('Temp:{0:0.1f} C '.format(temperature),1,2)
+            mylcd.lcd_display_string('Humidity:{0:0.1f} %'.format(humidity),2,1)
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    mylcd.lcd_clear()
+    mylcd.lcd_display_string('Thanks',1,5)
+    mylcd.lcd_display_string('For Watching',2,2)
+    time.sleep(5)
+    mylcd.lcd_clear()
